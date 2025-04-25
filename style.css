@@ -1,0 +1,47 @@
+html {
+  font-size: 16px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1 {
+  color: red;
+}
+
+.header {
+  display: flex;
+  background-color: grey;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(5, 50px);
+  grid-template-rows: repeat(6, 50px);
+  gap: 10px;
+}
+
+
+.cell {
+  background-color: lightgray;
+  border: 1px solid #ccc;
+}
+
+@media (min-width: 768px) {
+  body {
+    max-width: 40%;
+    margin: auto;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    max-width: 90%;
+    margin: auto;
+    margin-top: 1rem;
+  }
+}
