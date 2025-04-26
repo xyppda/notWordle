@@ -1,5 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+
 html {
   font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
 }
 
 *,
@@ -8,33 +14,68 @@ html {
   box-sizing: border-box;
 }
 
+#font-regular {
+  font-weight: 400;
+}
+
+
 h1 {
   color: red;
 }
 
 .header {
   display: flex;
-  background-color: grey;
+  margin-top: 0.5rem;
+  border: 1px solid #ccc;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-icons {
+  display: flex;
+  column-gap: 0.5rem;
+  align-items: center;
+}
+
+.header-icon {
+  height: 1.5em;
+  width: 1.5em;
 }
 
 .game-board {
-  display: grid;
-  grid-template-columns: repeat(5, 50px);
-  grid-template-rows: repeat(6, 50px);
-  gap: 10px;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  row-gap: 5px;
 }
 
+.word-attempt {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  column-gap: 5px;
+}
 
-.cell {
+.letter {
+  height: 60px;
+  width: 60px;
   background-color: lightgray;
   border: 1px solid #ccc;
+  border-radius: 5%;
+}
+
+.keyboard {
+  margin-top: 1rem;
+  display: flex;
 }
 
 @media (min-width: 768px) {
   body {
     max-width: 40%;
     margin: auto;
-    margin-top: 1rem;
   }
 }
 
