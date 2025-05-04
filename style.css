@@ -1,11 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
 
-html {
-  font-size: 16px;
+body {
+  color: #414a5e;
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
   font-weight: 700;
-  font-style: normal;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 0.5rem 0;
 }
 
 *,
@@ -14,10 +23,45 @@ html {
   box-sizing: border-box;
 }
 
+html {
+  font-size: 16px;
+}
+
+button {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.header-button {
+  display: flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border: transparent;
+  border-radius: 0.5rem;
+  background-color: #ebedf3;
+  color: #414a5e;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.header-button:hover {
+  color: #57ac57;
+  background-color: #e6f3e6;
+}
+
 #font-regular {
   font-weight: 400;
 }
-
 
 h1 {
   color: red;
@@ -25,8 +69,8 @@ h1 {
 
 .header {
   display: flex;
-  margin-top: 0.5rem;
-  border: 1px solid #ccc;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   justify-content: space-between;
   align-items: center;
 }
@@ -38,8 +82,9 @@ h1 {
 }
 
 .header-icon {
-  height: 1.5em;
-  width: 1.5em;
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke-width: 2px;
 }
 
 .game-board {
@@ -60,29 +105,47 @@ h1 {
 }
 
 .letter {
-  height: 60px;
-  width: 60px;
-  background-color: lightgray;
-  border: 1px solid #ccc;
-  border-radius: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  height: 3.5rem;
+  width: 3.5rem;
+  border: 2px solid #dee1e9;
+  border-radius: 10%;
 }
 
 .keyboard {
   margin-top: 1rem;
   display: flex;
+  flex-direction: column;
+}
+
+.keyboard-row {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.keyboard-subrow {
+  display: flex;
+}
+
+.key {
+  flex: 1;
+  min-width: 0;   
 }
 
 @media (min-width: 768px) {
   body {
     max-width: 40%;
     margin: auto;
+    font-size: 16px;
   }
 }
 
 @media (max-width: 767px) {
   body {
-    max-width: 90%;
-    margin: auto;
-    margin-top: 1rem;
+    margin: 0 0.5rem;
+    font-size: 13px;
   }
 }
