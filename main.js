@@ -17,23 +17,35 @@ settingsButton.addEventListener("click", () => {alert("Настройки буд
 helpButton.addEventListener("click", () => {alert("Правила игры будут добавлены позже.")});
 
 const attempts = document.querySelectorAll("word-attempt");
+
+// TODO сделать словарь вида {номер попытки: все буквы текущей попытки (5 элементов)}
+// TOOD придумать как реализовать проход по объекту: цикл? просто переменная?
+// const wordsMap = new Map()
+
 const keys = document.querySelectorAll('.key');
 const letters = document.querySelectorAll('.letter');
 
+
 keys.forEach(key => {
-  key.addEventListener('click', () => {
+  key.addEventListener("click", () => {
     const firstEmptyLetter = Array.from(letters).find(
-      container => container.textContent.trim() === ''
+      container => container.textContent.trim() === ""
     );
     
     if (firstEmptyLetter) {
       firstEmptyLetter.textContent = key.textContent;
     } else {
-      console.log('Все контейнеры уже заполнены!');
+      console.log("Все контейнеры уже заполнены!");
     }
   });
 });
 
+// TODO Доделать реализацию backspace
+// const backspace = document.querySelector("backspace-button");
+
+// backspace.addEventListener("click", () => {
+
+// })
 
 console.log(keys);
 

@@ -23,14 +23,9 @@ footer {
   box-sizing: border-box;
 }
 
-html {
-  font-size: 16px;
-}
-
 button {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  transition: background-color 0.2s, color 0.2s;
 }
 
 button:hover {
@@ -88,7 +83,7 @@ h1 {
 }
 
 .game-board {
-  margin-top: 1rem;
+  margin: 1rem 0;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -116,36 +111,66 @@ h1 {
 }
 
 .keyboard {
-  margin-top: 1rem;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
+  row-gap: 0.3rem;
 }
 
 .keyboard-row {
   display: flex;
   flex-wrap: nowrap;
+  column-gap: 0.3rem;
 }
 
-.keyboard-subrow {
+.keyboard-row > * {
+  font-size: 1.1rem;
   display: flex;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  background-color: #dce1ed;
+  color: #414a5e;
+  border: transparent;
+  border-radius: 0.3rem;
+  transition: background-color 0.2s;
+}
+
+.keyboard-row > *:hover {
+  background-color: #c4cbdd;
 }
 
 .key {
   flex: 1;
-  min-width: 0;   
+}
+
+.backspace-icon {
+  width: 2rem;
+  height: 2rem;
+  stroke-width: 2px;
+}
+
+.backspace-button, .enter-button {
+  width: 5rem;
 }
 
 @media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+  
   body {
     max-width: 40%;
     margin: auto;
-    font-size: 16px;
   }
 }
 
 @media (max-width: 767px) {
   body {
     margin: 0 0.5rem;
+  }
+
+  html {
     font-size: 13px;
   }
 }
