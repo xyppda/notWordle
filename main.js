@@ -4,7 +4,7 @@ import createGameboard from "./createGameboard.js";
 import getRandomInt from "./getRandomInt.js";
 
 // TODO добавить выбор длины слов
-// TODO с последним словом лажа, потестить + пофиксить
+// TODO пофиксить, что энтер нажимается после завершения игры
 // TODO как-то сделал, что невозможно проиграть
 
 let wordLength = 5;
@@ -58,41 +58,45 @@ const setupKeyboardInput = (attempts) => {
     });
 
     backspace.addEventListener("click", () => {
-      const attempt = [...attempts[appState.currentAttemptIndex].children];
-      const lastFullLetterIndex = attempt.findLastIndex(
-        (container) => container.textContent !== ""
-      );
-      if (lastFullLetterIndex !== -1) {
-        const target = attempt[lastFullLetterIndex];
-        target.textContent = "";
-        target.classList.remove("letter-complete");
-        appState.lastFullLetterIndex -= 1;
-      } else {
-        console.log("Все контейнеры пусты!");
+      if (appState.inputAvailability) {
+        const attempt = [...attempts[appState.currentAttemptIndex].children];
+        const lastFullLetterIndex = attempt.findLastIndex(
+          (container) => container.textContent !== ""
+        );
+        if (lastFullLetterIndex !== -1) {
+          const target = attempt[lastFullLetterIndex];
+          target.textContent = "";
+          target.classList.remove("letter-complete");
+          appState.lastFullLetterIndex -= 1;
+        } else {
+          console.log("Все контейнеры пусты!");
+        }
       }
     });
 
     enterButton.addEventListener("click", () => {
-      if (appState.lastFullLetterIndex === wordLength - 1) {
-        const word = [...attempts[appState.currentAttemptIndex].children];
-        const currentAttemptWord = Array.from(
-          word,
-          (letter) => letter.textContent
-        ).join("");
-        if (ALL_WORDS.includes(currentAttemptWord)) {
-          checkWord(word, keys);
-          if (appState.solve.every(Boolean)) {
-            win(attempts);
-          } else {
-            if (appState.currentAttemptIndex < attempts.length - 1) {
-              appState.currentAttemptIndex++;
-              appState.lastFullLetterIndex = -1;
+      if (appState.inputAvailability) {
+        if (appState.lastFullLetterIndex === wordLength - 1) {
+          const word = [...attempts[appState.currentAttemptIndex].children];
+          const currentAttemptWord = Array.from(
+            word,
+            (letter) => letter.textContent
+          ).join("");
+          if (ALL_WORDS.includes(currentAttemptWord)) {
+            checkWord(word, keys);
+            if (appState.solve.every(Boolean)) {
+              win(attempts);
             } else {
-              gameOver();
+              if (appState.currentAttemptIndex < attempts.length - 1) {
+                appState.currentAttemptIndex++;
+                appState.lastFullLetterIndex = -1;
+              } else {
+                gameOver();
+              }
             }
+          } else {
+            alert("Слово не найдено в словаре.");
           }
-        } else {
-          alert("Слово не найдено в словаре.");
         }
       }
     });
@@ -164,7 +168,8 @@ const createHelp = () => {
   helpHeader.append(closeButton);
   const mainHelp = document.createElement("div");
   mainHelp.className = "help-main";
-  mainHelp.textContent = "Игрок за шесть попыток должен угадать загаданное пятибуквенное слово, вводя слова той же длины. После каждой попытки буквы подсвечиваются: зелёным — если буква на правильном месте, жёлтым — если есть в слове, но не той позиции, и серым — если её нет вовсе. Удачи!";
+  mainHelp.textContent =
+    "Игрок за шесть попыток должен угадать загаданное пятибуквенное слово, вводя слова той же длины. После каждой попытки буквы подсвечиваются: зелёным — если буква на правильном месте, жёлтым — если есть в слове, но не той позиции, и серым — если её нет вовсе. Удачи!";
   placeholder.append(helpHeader);
   placeholder.append(mainHelp);
 };
