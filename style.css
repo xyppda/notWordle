@@ -106,6 +106,9 @@ h1 {
 }
 
 .help-main {
+  display: flex;
+  text-align: center;
+  text-wrap: balance;
   margin-top: 1rem;
   font-weight: 400;
   color: #2e3239;
