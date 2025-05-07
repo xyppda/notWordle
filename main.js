@@ -221,9 +221,6 @@ const checkWord = (word, keys) => {
     const letterText = letter.textContent;
     letter.classList.remove("letter-complete");
     const targetKey = keys.find((key) => key.textContent === letterText);
-    console.log(keys[5].textContent);
-    console.log(letterText);
-    console.log(targetKey);
     if (letterText === appState.hiddenWord[i]) {
       letter.classList.add("right");
       targetKey.classList.add("right");
