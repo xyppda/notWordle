@@ -1,9 +1,11 @@
-import { WORDS } from "./words.js";
+import { WORDS, ALL_WORDS } from "./words.js";
 import createKeyboard from "./createKeyboard.js";
 import createGameboard from "./createGameboard.js";
 import getRandomInt from "./getRandomInt.js";
 
 // TODO добавить выбор длины слов
+// TODO с последним словом лажа, потестить + пофиксить
+// TODO как-то сделал, что невозможно проиграть
 
 let wordLength = 5;
 
@@ -25,10 +27,6 @@ langButton.addEventListener("click", () => {
 
 settingsButton.addEventListener("click", () => {
   alert("Настройки будут добавлены позже.");
-});
-
-helpButton.addEventListener("click", () => {
-  alert("Правила игры будут добавлены позже.");
 });
 
 // Обработка ввода.
@@ -76,17 +74,25 @@ const setupKeyboardInput = (attempts) => {
 
     enterButton.addEventListener("click", () => {
       if (appState.lastFullLetterIndex === wordLength - 1) {
-        if (appState.currentAttemptIndex < attempts.length) {
-          const word = [...attempts[appState.currentAttemptIndex].children];
-          checkWord(word);
+        const word = [...attempts[appState.currentAttemptIndex].children];
+        const currentAttemptWord = Array.from(
+          word,
+          (letter) => letter.textContent
+        ).join("");
+        if (ALL_WORDS.includes(currentAttemptWord)) {
+          checkWord(word, keys);
           if (appState.solve.every(Boolean)) {
             win(attempts);
           } else {
-            appState.currentAttemptIndex++;
-            appState.lastFullLetterIndex = -1;
+            if (appState.currentAttemptIndex < attempts.length - 1) {
+              appState.currentAttemptIndex++;
+              appState.lastFullLetterIndex = -1;
+            } else {
+              gameOver();
+            }
           }
         } else {
-          gameOver();
+          alert("Слово не найдено в словаре.");
         }
       }
     });
@@ -128,6 +134,49 @@ const newGame = () => {
 
 newGame();
 
+// Закрытие справки/настроек
+
+const close = () => {
+  document.querySelector(".placeholder").innerHTML = "";
+  newGame();
+};
+
+// Вывод правил
+
+const createHelp = () => {
+  cleareGame();
+  const placeholder = document.querySelector(".placeholder");
+  const closeButton = document.createElement("button");
+  const helpHeader = document.createElement("div");
+  helpHeader.className = "help-header";
+  const helpHeaderText = document.createElement("div");
+  helpHeaderText.className = "help-header-text";
+  helpHeaderText.textContent = "Правила игры";
+  closeButton.className = "close-button";
+  const closeButtonSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+    </svg>
+  `;
+  closeButton.insertAdjacentHTML("beforeend", closeButtonSvg);
+  closeButton.addEventListener("click", () => close());
+  helpHeader.append(helpHeaderText);
+  helpHeader.append(closeButton);
+  const mainHelp = document.createElement("div");
+  mainHelp.className = "help-main";
+  mainHelp.textContent = "Игрок за шесть попыток должен угадать загаданное пятибуквенное слово, вводя слова той же длины. После каждой попытки буквы подсвечиваются: зелёным — если буква на правильном месте, жёлтым — если есть в слове, но не той позиции, и серым — если её нет вовсе. Удачи!";
+  placeholder.append(helpHeader);
+  placeholder.append(mainHelp);
+};
+
+helpButton.addEventListener("click", () => {
+  if (!document.querySelector(".close-button")) {
+    createHelp();
+  } else {
+    close();
+  }
+});
+
 // Поражение в игре.
 
 const gameOver = () => {
@@ -156,7 +205,7 @@ const win = (attempts) => {
     const target = [...attempts[i].children];
     console.log(target);
     target.forEach((letter) => {
-      letter.classList.add("letter-muted");
+      letter.classList.add("muted");
     });
   }
   createNewGameButton();
@@ -165,19 +214,27 @@ const win = (attempts) => {
 
 // TODO Проверка слова. Вызывается по нажатию Enter
 
-const checkWord = (word) => {
+const checkWord = (word, keys) => {
+  keys = [...keys];
   for (let i = 0; i < wordLength; i++) {
     const letter = word[i];
     const letterText = letter.textContent;
     letter.classList.remove("letter-complete");
+    const targetKey = keys.find((key) => key.textContent === letterText);
+    console.log(keys[5].textContent);
+    console.log(letterText);
+    console.log(targetKey);
     if (letterText === appState.hiddenWord[i]) {
-      letter.classList.add("letter-right");
+      letter.classList.add("right");
+      targetKey.classList.add("right");
       appState.solve[i] = true;
     } else if (appState.hiddenWord.includes(letterText)) {
-      letter.classList.add("letter-semi-right");
+      letter.classList.add("semi-right");
+      targetKey.classList.add("semi-right");
       appState.solve[i] = false;
     } else {
-      letter.classList.add("letter-wrong");
+      letter.classList.add("wrong");
+      targetKey.classList.add("wrong");
       appState.solve[i] = false;
     }
   }
