@@ -48,7 +48,7 @@ button:hover {
   transition: background-color 0.2s, color 0.2s;
 }
 
-.header-button:hover {
+.header-button:hover, .new-game-button:hover {
   color: #57ac57;
   background-color: #e6f3e6;
 }
@@ -132,8 +132,9 @@ h1 {
   border: 2px solid #a7adc0;
 }
 
-.letter-wrong, .letter-semi-right, .letter-right {
+.letter-wrong, .letter-semi-right, .letter-right, .letter-muted {
   color: #fff;
+  border: transparent;
 }
 
 .letter-wrong {
@@ -148,9 +149,37 @@ h1 {
   background-color: #79b851;
 }
 
+.letter-muted {
+  background-color: #dee1e9;
+}
+
+.new-game-placeholder {
+  display: flex;
+  justify-content: center;
+}
+
+.new-game-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 0.5rem;
+  border: 3px solid #414a5e;
+  border-radius: 0.5rem;
+  background-color: #ebedf3;
+  color: #414a5e;
+  transition: background-color 0.2s, color 0.2s, border 0.2s;
+}
+
+.new-game-button:hover {
+  border: 3px solid #79b851;
+}
+
+
 
 .keyboard {
-  margin-top: 2rem;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   row-gap: 0.3rem;
