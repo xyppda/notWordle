@@ -76,7 +76,7 @@ const setupKeyboardInput = (attempts) => {
 
     enterButton.addEventListener("click", () => {
       if (appState.lastFullLetterIndex === wordLength - 1) {
-        if (appState.currentAttemptIndex < attempts.length - 1) {
+        if (appState.currentAttemptIndex < attempts.length) {
           const word = [...attempts[appState.currentAttemptIndex].children];
           checkWord(word);
           if (appState.solve.every(Boolean)) {
