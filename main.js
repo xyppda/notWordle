@@ -15,6 +15,7 @@ const appState = {
   hiddenWord: "",
   inputAvailability: false,
   solve: Array(wordLength).fill(false),
+  solveMask: Array(wordLength).fill(""),
 };
 
 const langButton = document.getElementById("lang-button");
@@ -41,14 +42,16 @@ const setupKeyboardInput = (attempts) => {
       key.addEventListener("click", () => {
         const attempt = [...attempts[appState.currentAttemptIndex].children];
         const firstEmptyLetterIndex = attempt.findIndex(
-          (container) => container.textContent.trim() === ""
+          (container) =>
+            container.textContent.trim() === "" ||
+            container.classList.contains("clue")
         );
 
         if (firstEmptyLetterIndex !== -1) {
           const target = attempt[firstEmptyLetterIndex];
           target.textContent = key.textContent;
+          target.classList.remove("clue");
           appState.lastFullLetterIndex = firstEmptyLetterIndex;
-
           target.classList.remove("letter-animated");
           void target.offsetWidth;
           target.classList.add("letter-animated");
@@ -60,13 +63,15 @@ const setupKeyboardInput = (attempts) => {
     backspace.addEventListener("click", () => {
       if (appState.inputAvailability) {
         const attempt = [...attempts[appState.currentAttemptIndex].children];
-        const lastFullLetterIndex = attempt.findLastIndex(
-          (container) => container.textContent !== ""
+        const lastFullLetterIndex = attempt.findLastIndex((container) =>
+          container.classList.contains("letter-complete")
         );
+        console.log(lastFullLetterIndex);
         if (lastFullLetterIndex !== -1) {
           const target = attempt[lastFullLetterIndex];
-          target.textContent = "";
+          target.textContent = appState.solveMask[lastFullLetterIndex];
           target.classList.remove("letter-complete");
+          target.classList.add("clue");
           appState.lastFullLetterIndex -= 1;
         } else {
           console.log("Все контейнеры пусты!");
@@ -90,6 +95,14 @@ const setupKeyboardInput = (attempts) => {
               if (appState.currentAttemptIndex < attempts.length - 1) {
                 appState.currentAttemptIndex++;
                 appState.lastFullLetterIndex = -1;
+                const nextWord = [
+                  ...attempts[appState.currentAttemptIndex].children,
+                ];
+                for (let i = 0; i < wordLength; i++) {
+                  const letter = nextWord[i];
+                  letter.classList.add("clue");
+                  letter.textContent = appState.solveMask[i];
+                }
               } else {
                 gameOver();
               }
@@ -126,7 +139,6 @@ const cleareGame = () => {
 
 const newGame = () => {
   appState.hiddenWord = WORDS[getRandomInt(0, WORDS.length)];
-  console.log(appState.hiddenWord);
   cleareGame();
   createGameboard(wordLength);
   createKeyboard();
@@ -217,7 +229,7 @@ const win = (attempts) => {
   appState.inputAvailability = false;
 };
 
-// TODO Проверка слова. Вызывается по нажатию Enter
+// Проверка слова. Вызывается по нажатию Enter
 
 const checkWord = (word, keys) => {
   keys = [...keys];
@@ -229,6 +241,7 @@ const checkWord = (word, keys) => {
     if (letterText === appState.hiddenWord[i]) {
       letter.classList.add("right");
       targetKey.classList.add("right");
+      appState.solveMask[i] = letterText;
       appState.solve[i] = true;
     } else if (appState.hiddenWord.includes(letterText)) {
       letter.classList.add("semi-right");
