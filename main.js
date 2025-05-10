@@ -66,15 +66,12 @@ const setupKeyboardInput = (attempts) => {
         const lastFullLetterIndex = attempt.findLastIndex((container) =>
           container.classList.contains("letter-complete")
         );
-        console.log(lastFullLetterIndex);
         if (lastFullLetterIndex !== -1) {
           const target = attempt[lastFullLetterIndex];
           target.textContent = appState.solveMask[lastFullLetterIndex];
           target.classList.remove("letter-complete");
           target.classList.add("clue");
           appState.lastFullLetterIndex -= 1;
-        } else {
-          console.log("Все контейнеры пусты!");
         }
       }
     });
@@ -144,8 +141,10 @@ const newGame = () => {
   createKeyboard();
   appState.inputAvailability = true;
   appState.currentAttemptIndex = 0;
+  appState.solveMask = Array(wordLength).fill("");
   const attempts = document.querySelectorAll(".word-attempt");
   setupKeyboardInput(attempts);
+  console.log(appState.hiddenWord);
 };
 
 newGame();
@@ -220,7 +219,6 @@ const win = (attempts) => {
   }
   for (let i = attemptIndex; i < attempts.length; i++) {
     const target = [...attempts[i].children];
-    console.log(target);
     target.forEach((letter) => {
       letter.classList.add("muted");
     });
