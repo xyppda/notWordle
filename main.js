@@ -4,10 +4,29 @@ import createGameboard from "./createGameboard.js";
 import getRandomInt from "./getRandomInt.js";
 
 // TODO добавить выбор длины слов
-// TODO пофиксить, что энтер нажимается после завершения игры
-// TODO как-то сделал, что невозможно проиграть
+// TODO добавить выбор языка
+// TODO добавить настройки в целом
+// TODO нельзя повторно вводить слова
+// TODO если бува желтая длина-1 раз на разных позициях, то отображать серой (можно сделать объект где для каждой желтой буквы хранится ее маска (
+// то есть если буква встречается, то в объект добавлется ключ по букве и массив, где отмечаются позиции, где этой буквы нет))
 
 let wordLength = 5;
+
+// TODO new (counter)
+
+// const counter = (arr) => {
+//   const counted = new Map();
+//     arr.forEach((letter) => {
+//     if (counted.includes(letter)) {
+//       counted[letter]++;
+//     } else {
+//       counted.append(letter);
+//     }
+//   })
+// }
+
+// end new
+
 
 const appState = {
   lastFullLetterIndex: -1,
