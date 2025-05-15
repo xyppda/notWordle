@@ -1,5 +1,5 @@
-import newGame from "./newGame.js";
-import createHelp from "./createHelp.js";
+import newGame from "./scripts/newGame.js";
+import createHelp from "./scripts/createHelp.js";
 
 
 // TODO исправить вывод правил (сделать поверх, не нужно запускать новую игру каждый раз)
