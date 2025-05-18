@@ -1,0 +1,12 @@
+db:
+  host: postgres
+  port: 5432
+  user: postgres
+  dbname: notwordle
+
+server:
+  port: ":8000"
+
+redis:
+  addr: redis:6379
+  db: 0
