@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"notWordleApi/internal/service"
 )
@@ -11,6 +12,7 @@ type Handler struct {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.Default()
+	router.Use(cors.Default())
 	{
 		api := router.Group("/api")
 		{
