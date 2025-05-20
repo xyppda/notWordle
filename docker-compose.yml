@@ -27,8 +27,8 @@ services:
         condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/ping"]
-      start_period: 10s
-      interval: 30s
+      start_period: 30s
+      interval: 20s
       timeout: 10s
       retries: 3
     networks:

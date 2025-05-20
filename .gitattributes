@@ -1,0 +1,6 @@
+*.sh text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.go text eol=lf
+*.png binary
+*.jpg binary

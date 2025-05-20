@@ -29,7 +29,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 		{
 			words := api.Group("/words")
-			words.GET("/exists", h.checkExistence)
+			words.POST("/exists", h.checkExistence)
 		}
 	}
 	return router
