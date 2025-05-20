@@ -48,7 +48,7 @@ const handleKeyboardInput = (attempts) => {
       }
     });
 
-    enterButton.addEventListener("click", () => {
+    enterButton.addEventListener("click", async () => {
       if (appState.inputAvailability) {
         if (appState.lastFullLetterIndex === wordLength - 1) {
           const word = [...attempts[appState.currentAttemptIndex].children];
@@ -56,28 +56,47 @@ const handleKeyboardInput = (attempts) => {
             word,
             (letter) => letter.textContent
           ).join("");
-          if (ALL_WORDS.includes(currentAttemptWord)) {
-            checkWord(word, keys);
-            if (appState.solve.every(Boolean)) {
-              win(attempts);
-            } else {
-              if (appState.currentAttemptIndex < attempts.length - 1) {
-                appState.currentAttemptIndex++;
-                appState.lastFullLetterIndex = -1;
-                const nextWord = [
-                  ...attempts[appState.currentAttemptIndex].children,
-                ];
-                for (let i = 0; i < wordLength; i++) {
-                  const letter = nextWord[i];
-                  letter.classList.add("clue");
-                  letter.textContent = appState.solveMask[i];
-                }
-              } else {
-                gameOver();
+
+          try {
+            const response = await fetch(
+              "http://localhost:8000/api/words/exists",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ word: currentAttemptWord }),
               }
+            );
+
+            const data = await response.json();
+            console.log("Ответ от сервера:", data);
+            const isCurrentWordExists = data["exists"];
+            console.log("Слово существует:", isCurrentWordExists);
+
+            if (isCurrentWordExists) {
+              checkWord(word, keys);
+              if (appState.solve.every(Boolean)) {
+                win(attempts);
+              } else {
+                if (appState.currentAttemptIndex < attempts.length - 1) {
+                  appState.currentAttemptIndex++;
+                  appState.lastFullLetterIndex = -1;
+                  const nextWord = [
+                    ...attempts[appState.currentAttemptIndex].children,
+                  ];
+                  for (let i = 0; i < wordLength; i++) {
+                    const letter = nextWord[i];
+                    letter.classList.add("clue");
+                    letter.textContent = appState.solveMask[i];
+                  }
+                } else {
+                  gameOver();
+                }
+              }
+            } else {
+              alert("Слово не найдено в словаре.");
             }
-          } else {
-            alert("Слово не найдено в словаре.");
+          } catch (error) {
+            console.error("Ошибка при fetch:", error);
           }
         }
       }
