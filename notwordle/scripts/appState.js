@@ -1,6 +1,7 @@
 let wordLength = 5;
 
 const appState = {
+  gameId: 0,
   lastFullLetterIndex: -1,
   currentAttemptIndex: 0,
   hiddenWord: "",

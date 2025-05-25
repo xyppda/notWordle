@@ -49,56 +49,78 @@ const handleKeyboardInput = (attempts) => {
     });
 
     enterButton.addEventListener("click", async () => {
-      if (appState.inputAvailability) {
-        if (appState.lastFullLetterIndex === wordLength - 1) {
-          const word = [...attempts[appState.currentAttemptIndex].children];
-          const currentAttemptWord = Array.from(
-            word,
-            (letter) => letter.textContent
-          ).join("");
+      if (!appState.inputAvailability) return;
+      if (appState.lastFullLetterIndex !== wordLength - 1) return;
 
-          try {
-            const response = await fetch(
-              "http://localhost:8000/api/words/exists",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ word: currentAttemptWord }),
-              }
+      const wordElements = [...attempts[appState.currentAttemptIndex].children];
+      const currentAttemptWord = wordElements
+        .map((el) => el.textContent)
+        .join("");
+
+      try {
+        const existsRes = await fetch("http://notwordle.ru/api/words/exists", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ word: currentAttemptWord }),
+        });
+
+        const existsData = await existsRes.json();
+        const isCurrentWordExists = existsData.exists;
+
+        if (!isCurrentWordExists) {
+          alert("Слово не найдено в словаре.");
+          return;
+        }
+
+        await checkWord(wordElements, keys);
+
+        if (appState.solve.every(Boolean)) {
+          await checkWord(wordElements, keys); // ← теперь ждем
+
+          if (appState.solve.every(Boolean)) {
+            const gameRes = await fetch(
+              `http://notwordle.ru/api/games/${appState.gameId}`
             );
+            const gameData = await gameRes.json();
 
-            const data = await response.json();
-            console.log("Ответ от сервера:", data);
-            const isCurrentWordExists = data["exists"];
-            console.log("Слово существует:", isCurrentWordExists);
-
-            if (isCurrentWordExists) {
-              checkWord(word, keys);
-              if (appState.solve.every(Boolean)) {
-                win(attempts);
-              } else {
-                if (appState.currentAttemptIndex < attempts.length - 1) {
-                  appState.currentAttemptIndex++;
-                  appState.lastFullLetterIndex = -1;
-                  const nextWord = [
-                    ...attempts[appState.currentAttemptIndex].children,
-                  ];
-                  for (let i = 0; i < wordLength; i++) {
-                    const letter = nextWord[i];
-                    letter.classList.add("clue");
-                    letter.textContent = appState.solveMask[i];
-                  }
-                } else {
-                  gameOver();
-                }
-              }
-            } else {
-              alert("Слово не найдено в словаре.");
+            if (gameData.status !== "active") {
+              appState.hiddenWord = gameData.word || "";
+              console.log("Загаданное слово:", appState.hiddenWord);
             }
-          } catch (error) {
-            console.error("Ошибка при fetch:", error);
+
+            win(attempts);
+          }
+        } else {
+          if (appState.currentAttemptIndex < attempts.length - 1) {
+            appState.currentAttemptIndex++;
+            appState.lastFullLetterIndex = -1;
+
+            const nextWord = [
+              ...attempts[appState.currentAttemptIndex].children,
+            ];
+            for (let i = 0; i < wordLength; i++) {
+              const letter = nextWord[i];
+              letter.classList.add("clue");
+              letter.textContent = appState.solveMask[i];
+            }
+          } else {
+            const gameRes = await fetch(
+              `http://notwordle.ru/api/games/${appState.gameId}`
+            );
+            if (!gameRes.ok)
+              throw new Error("Не удалось получить информацию об игре");
+
+            const gameData = await gameRes.json();
+            if (gameData.status !== "active") {
+              appState.hiddenWord = gameData.word || "";
+              console.log("Загаданное слово:", appState.hiddenWord);
+            }
+
+            gameOver();
           }
         }
+      } catch (error) {
+        console.error("Ошибка при обработке ввода:", error);
       }
     });
   }
