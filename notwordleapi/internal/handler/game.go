@@ -84,5 +84,5 @@ func (h *Handler) getGameInfo(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"info": info})
+	c.JSON(http.StatusOK, info)
 }

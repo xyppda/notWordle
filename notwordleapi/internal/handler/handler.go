@@ -26,11 +26,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 				game.GET("/attempts", h.getAttempts)
 				game.GET("/guesses", h.getGuesses)
 			}
-		}
-		{
 			words := api.Group("/words")
-			words.POST("/exists", h.checkExistence)
+			{
+				words.POST("/exists", h.checkExistence)
+			}
 		}
+
 	}
 	return router
 }
