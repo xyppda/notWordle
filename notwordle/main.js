@@ -10,18 +10,13 @@ import createHelp from "./scripts/createHelp.js";
 // TODO если бува желтая длина-1 раз на разных позициях, то отображать серой (можно сделать объект где для каждой желтой буквы хранится ее маска (
 // то есть если буква встречается, то в объект добавлется ключ по букве и массив, где отмечаются позиции, где этой буквы нет))
 
-// TODO new (counter)
-
-// const counter = (arr) => {
-//   const counted = new Map();
-//     arr.forEach((letter) => {
-//     if (counted.includes(letter)) {
-//       counted[letter]++;
-//     } else {
-//       counted.append(letter);
-//     }
-//   })
-// }
+/* эндпоинты:
+POST	/api/games
+GET	/api/games/:id
+POST	/api/games/:id/guess
+GET	/api/games/:id/attempts
+GET	/api/games/:id/guesses
+*/
 
 // end new
 
